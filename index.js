@@ -166,26 +166,27 @@ tg.inlineMode(($) => {
     fs.stat(config.imageFolder + $.from.id, function(err, stats) {
     	if(!err){
     		fs.readdir(config.imageFolder + $.from.id, function(err,files){
-		    	files = files.filter(function(val){
-		    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
-		    	});
-		    	files.forEach(function(val,ind,arr){
-		    		var dimensions = imageSize(config.imageFolder + $.from.id + "/" + val);
-		    		results.push({
-		    			type: "photo",
-		    			id : val.slice(0,36),
-		    			photo_url : config.serverUrl + $.from.id + "/" + val,
-		    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val.slice(0,val.lastIndexOf(".")) + "-100x100" + path.extname(val),
-		    			//caption : config.serverUrl + $.from.id + "/" + val,
-		    			photo_width : dimensions.width,
-		    			photo_height : dimensions.height
-		    		});
-		    	});
-		    	tg.paginatedAnswer($,results, 20, {
-		    		cache_time : 5,
-		    		is_personal : true
-		    	});
-
+    			if(files.length > 0){
+	    			files = files.filter(function(val){
+			    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
+			    	});
+			    	files.forEach(function(val,ind,arr){
+			    		var dimensions = imageSize(config.imageFolder + $.from.id + "/" + val);
+			    		results.push({
+			    			type: "photo",
+			    			id : val.slice(0,36),
+			    			photo_url : config.serverUrl + $.from.id + "/" + val,
+			    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val.slice(0,val.lastIndexOf(".")) + "-100x100" + path.extname(val),
+			    			//caption : config.serverUrl + $.from.id + "/" + val,
+			    			photo_width : dimensions.width,
+			    			photo_height : dimensions.height
+			    		});
+			    	});
+			    	tg.paginatedAnswer($,results, 20, {
+			    		cache_time : 5,
+			    		is_personal : true
+			    	});	
+    			}
 		    });
     	}
     });
