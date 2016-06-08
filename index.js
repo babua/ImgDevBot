@@ -63,7 +63,7 @@ tg.controller('AddController', ($) => {
 													thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
 													  // "filename" is the name of the thumb in '/path/to/thumbnails'
 													  //Send a message to user after thumbnail is generated
-													  $.sendMessage("Image added with ID: " + path.basename($.newFileName),{reply_to_message_id: $.message.message_id});
+													  $.sendMessage("Image added with ID: " + path.basename($.newFileName,path.extname($.newFileName)),{reply_to_message_id: $.message.message_id});
 													});
 											    }
 											});
@@ -104,7 +104,7 @@ tg.controller('DeleteController', ($) => {
 			    	});
 			    	if(files.length === 1)
 			    	{
-			    		fs.unlink(config.imageFolder + $.user.id + files[0], function(err){
+			    		fs.unlink(config.imageFolder + $.user.id + "/" + files[0], function(err){
 			    			if(!err){
 								fs.unlink(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0]) + "-100x100" + path.extname(files[0]), function(err){
 									if(!err){
