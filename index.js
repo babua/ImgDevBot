@@ -192,7 +192,7 @@ tg.inlineMode(($) => {
 		    		});
 		    	});
 		    	console.log(results);
-		    	$.answerInlineQuery(results, 20, {
+		    	$.answerInlineQuery(results, {
 		    		cache_time : 1,
 		    		is_personal : true
 		    	});
