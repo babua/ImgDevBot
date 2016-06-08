@@ -33,7 +33,6 @@ var saveImage = function($,imageUrl){
 			//Make sure thumbnail folder exists
 			mkdirp(config.imageFolder + $.user.id + "/thumbnails/", function (err) {
 			    if (err){console.error(err);} else {
-			    	console.log($);
 			    	//Set up the thumbnail generator
 					var thumbnail = new Thumbnail(config.imageFolder + $.user.id, config.imageFolder + $.user.id + "/thumbnails");    	
 					thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
@@ -56,7 +55,6 @@ tg.router.
 
 tg.controller('DeleteController', ($) => {
 	tg.for('/delete :id', ($) => {
-		console.log($);
 		fs.stat(config.imageFolder + $.user.id, function(err, stats) {
 	    	if(!err){
 	    		fs.readdir(config.imageFolder + $.user.id, function(err,files){
@@ -119,10 +117,7 @@ tg.controller('AddController', ($) => {
 						} else {
 							if(fileSize < config.fileSizeLimit){
 								//We can start saving the image
-								console.log($);	
-
 								saveImage($,$.query.url);
-
 							} else {
 								$.sendMessage("URL is image but it's larger than " + config.fileSizeLimitHumanReadable );		
 							}
@@ -152,12 +147,10 @@ tg.controller('OtherwiseController', ($) => {
 		  	}
 		});
 		tg.getFile(photo.file_id, (body, err) => {
-			console.log(body)
 			if(!err){
 				if(body.ok){
 					if(body.result.file_size <= config.fileSizeLimit){
 						var downloadUrl = "https://api.telegram.org/file/bot" + config.telegram.token + "/" + body.result.file_path;
-						console.log(downloadUrl)
 						saveImage($,downloadUrl)
 					}
 					
@@ -169,8 +162,6 @@ tg.controller('OtherwiseController', ($) => {
 
 
 tg.inlineMode(($) => {
-	console.log($);
-
     var results = [];
     fs.stat(config.imageFolder + $.from.id, function(err, stats) {
     	if(!err){
@@ -190,9 +181,8 @@ tg.inlineMode(($) => {
 		    			photo_height : dimensions.height
 		    		});
 		    	});
-		    	console.log(results);
 		    	tg.paginatedAnswer($,results, 20, {
-		    		cache_time : 0,
+		    		cache_time : 5,
 		    		is_personal : true
 		    	});
 
