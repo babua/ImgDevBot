@@ -108,7 +108,7 @@ tg.inlineMode(($) => {
 		    		//
 		    		results.push({
 		    			type: "photo",
-		    			id : val.slice(0,35),
+		    			id : val.slice(0,36),
 		    			photo_url : config.serverUrl + $.from.id + "/" + val,
 		    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val.slice(0,val.lastIndexOf(".")-1) + "-100x100" + path.extname(val)
 		    		});
