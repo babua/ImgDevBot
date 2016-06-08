@@ -109,11 +109,11 @@ tg.controller('DeleteController', ($) => {
 			    				console.log(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
 								fs.unlink(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]), function(err){
 									if(!err){
+										$.sendMessage("Image deleted",{reply_to_message_id: $.message.message_id});			
+									} else {
+										console.log("Thumbnail could not be deleted: " + config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
 										//TODO
 										//Main file is deleted, but log the thumbnail deletion failure in a file
-										console.log("Thumbnail could not be deleted: " + config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
-									} else {
-										$.sendMessage("Image deleted",{reply_to_message_id: $.message.message_id});			
 									} 
 								});
 			    			} else {
