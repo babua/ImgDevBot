@@ -112,13 +112,12 @@ tg.controller('DeleteController', ($) => {
 										//Main file is deleted, but log the thumbnail deletion failure in a file
 										console.error("Thumbnail could not be deleted: " + config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0]) + "-100x100");
 									} 
-									$.sendMessage("File deleted",{reply_to_message_id: $.message.message_id});		
+									$.sendMessage("Image deleted",{reply_to_message_id: $.message.message_id});		
 								});
 			    			} else {
-			    				
+			    				$.sendMessage("Image could not be deleted",{reply_to_message_id: $.message.message_id});
 			    			}
 			    		});
-			    		$.sendMessage("Image deleted",{reply_to_message_id: $.message.message_id});
 			    	} else if (files.length === 0){
 			    		$.sendMessage("ID not found",{reply_to_message_id: $.message.message_id});
 			    	} else if (files.length > 1) {
