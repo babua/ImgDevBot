@@ -93,9 +93,9 @@ tg.router.
 tg.controller('DeleteController', ($) => {
 	tg.for('/delete :id', ($) => {
 		console.log($);
-		fs.stat(config.imageFolder + $.from.id, function(err, stats) {
+		fs.stat(config.imageFolder + $.user.id, function(err, stats) {
 	    	if(!err){
-	    		fs.readdir(config.imageFolder + $.from.id, function(err,files){
+	    		fs.readdir(config.imageFolder + $.user.id, function(err,files){
 			    	files = files.filter(function(val){
 			    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
 			    	});
