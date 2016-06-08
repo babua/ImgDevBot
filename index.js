@@ -63,7 +63,7 @@ tg.controller('AddController', ($) => {
 													thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
 													  // "filename" is the name of the thumb in '/path/to/thumbnails'
 													  //Send a message to user after thumbnail is generated
-													  $.sendMessage("Image added with ID: " + path.basename($.newFileName));
+													  $.sendMessage("Image added with ID: " + path.basename($.newFileName),{reply_to_message_id: $.message.message_id});
 													});
 											    }
 											});
