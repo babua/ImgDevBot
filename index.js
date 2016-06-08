@@ -9,7 +9,8 @@ var config = require('./config/config.js'),
 	uuid = require('node-uuid'),
 	path = require('path'),
 	Thumbnail = require('thumbnail'),
-	fs = require('fs');
+	fs = require('fs'),
+	imageSize = require('image-size');
 
 mkdirp.sync(config.imageFolder);
 
@@ -105,13 +106,16 @@ tg.inlineMode(($) => {
 		    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
 		    	});
 		    	files.forEach(function(val,ind,arr){
-		    		//
+		    		var dimensions = sizeOf(config.imageFolder + $.from.id + "/" + val);
+
 		    		results.push({
 		    			type: "photo",
 		    			id : val.slice(0,36),
 		    			photo_url : config.serverUrl + $.from.id + "/" + val,
 		    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val.slice(0,val.lastIndexOf(".")) + "-100x100" + path.extname(val),
-		    			caption : config.serverUrl + $.from.id + "/" + val
+		    			caption : config.serverUrl + $.from.id + "/" + val,
+		    			photo_width : dimensions.width,
+		    			photo_height : dimensions.height
 		    		});
 		    	});
 		    	console.log(results);
