@@ -180,7 +180,6 @@ tg.inlineMode(($) => {
 		    	});
 		    	files.forEach(function(val,ind,arr){
 		    		var dimensions = imageSize(config.imageFolder + $.from.id + "/" + val);
-
 		    		results.push({
 		    			type: "photo",
 		    			id : val.slice(0,36),
@@ -193,7 +192,7 @@ tg.inlineMode(($) => {
 		    	});
 		    	console.log(results);
 		    	$.paginatedAnswer(results, 20, {
-		    		cache_time : 1,
+		    		cache_time : 0,
 		    		is_personal : true
 		    	});
 
