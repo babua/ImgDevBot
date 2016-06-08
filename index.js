@@ -140,7 +140,7 @@ tg.controller('OtherwiseController', ($) => {
 	console.log("=====OtherwiseController=====")
 	console.log($);
 	if($.message.photo !== undefined){
-		console.log('YES, THIS IS PHOTO')
+		console.log($.message.photo)
 	}
 })
 
