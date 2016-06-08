@@ -108,8 +108,8 @@ tg.inlineMode(($) => {
 		    		//
 		    		results.push({
 		    			type: "photo",
-		    			photo_url : config.imageFolder + $.from.id + "/" + val,
-		    			thumb_url : config.imageFolder + $.from.id + "/thumbnails/" + val
+		    			photo_url : config.serverUrl + $.from.id + "/" + val,
+		    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val
 		    		});
 		    	});
 		    });
