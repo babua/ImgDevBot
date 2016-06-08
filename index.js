@@ -44,6 +44,7 @@ tg.controller('AddController', ($) => {
 								    } else {
 								    	console.log('pow!');
 								    	$.newFileName = uuid.v1() + path.extname($.query.url);
+								    	console.log($.newFileName);
 								    	//$.newFileName = uuid.v1() + "_" + path.basename($.query.url);
 										download($.query.url, {
 											directory: config.imageFolder + $.user.id,
@@ -55,7 +56,7 @@ tg.controller('AddController', ($) => {
 											console.log("meow")
 											
 											var mkdirpCallback = function (err) {
-												console.log("injected filename: " + $.fileName);
+												console.log("injected filename: " + $.newFileName);
 											    if (err)
 											    {
 											    	console.error(err);
@@ -66,6 +67,7 @@ tg.controller('AddController', ($) => {
 													thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
 													  // "filename" is the name of the thumb in '/path/to/thumbnails'
 													  console.log("thumbnail created at " + filename);
+													  $.sendMessage("Image added with ID: " + path.basename($.newFileName));
 													});
 											    }
 											}
