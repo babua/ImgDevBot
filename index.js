@@ -142,7 +142,8 @@ tg.controller('OtherwiseController', ($) => {
 	if($.message.photo !== undefined){
 		// console.log($.message.photo)
 		var photoIndex = $.message.photo.reduce(function(previousValue, currentValue, currentIndex, array) {
-			console.log(currentValue)
+			console.log("prev: " + previousValue)
+			console.log("curr: " + currentValue)
 		  	if(currentValue.width > previousValue.width) return currentIndex;
 		});
 		var photo = $.message.photo[photoIndex];
