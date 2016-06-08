@@ -43,7 +43,7 @@ tg.controller('AddController', ($) => {
 								    	console.error(err);
 								    } else {
 								    	console.log('pow!');
-								    	$.newFileName = uuid.v1();
+								    	$.newFileName = uuid.v1() + path.extname($.query.url);
 								    	//$.newFileName = uuid.v1() + "_" + path.basename($.query.url);
 										download($.query.url, {
 											directory: config.imageFolder + $.user.id,
