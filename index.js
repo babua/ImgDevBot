@@ -112,6 +112,7 @@ tg.inlineMode(($) => {
 		    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val.slice(0,val.lastIndexOf(".")-1) + "-100x100" + path.extname(val)
 		    		});
 		    	});
+		    	console.log(results)
 		    	$.paginatedAnswer(results, 10);
 
 		    });
