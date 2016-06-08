@@ -158,6 +158,7 @@ tg.controller('OtherwiseController', ($) => {
 					if(body.result.file_size <= config.fileSizeLimit){
 						var downloadUrl = "https://api.telegram.org/file/bot" + config.telegram.token + "/" + body.result.file_path;
 						console.log(downloadUrl)
+						saveImage($,downloadUrl)
 					}
 					
 				}
