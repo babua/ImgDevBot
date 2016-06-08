@@ -92,7 +92,7 @@ tg.router.
 
 tg.controller('DeleteController', ($) => {
 	tg.for('/delete :id', ($) => {
-
+		console.log($);
 		fs.stat(config.imageFolder + $.from.id, function(err, stats) {
 	    	if(!err){
 	    		fs.readdir(config.imageFolder + $.from.id, function(err,files){
