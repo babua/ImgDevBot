@@ -19,6 +19,7 @@ tg.router.
 
 tg.controller('AnyController', ($) => {
 	tg.for('', ($) => {
+		console.log('=====AnyController=====')
 		console.log($)
 	})
 })
