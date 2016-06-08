@@ -166,7 +166,6 @@ tg.inlineMode(($) => {
     fs.stat(config.imageFolder + $.from.id, function(err, stats) {
     	if(!err){
     		fs.readdir(config.imageFolder + $.from.id, function(err,files){
-    			if(files.length > 0){
 	    			files = files.filter(function(val){
 			    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
 			    	});
@@ -182,11 +181,14 @@ tg.inlineMode(($) => {
 			    			photo_height : dimensions.height
 			    		});
 			    	});
-			    	tg.paginatedAnswer($,results, 20, {
-			    		cache_time : 5,
-			    		is_personal : true
-			    	});	
-    			}
+			    	if(results.length > 0){
+						tg.paginatedAnswer($,results, 20, {
+							cache_time : 5,
+							is_personal : true
+						});				    		
+			    	}
+
+    			
 		    });
     	}
     });
