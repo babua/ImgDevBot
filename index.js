@@ -15,6 +15,15 @@ var config = require('./config/config.js'),
 mkdirp.sync(config.imageFolder);
 
 tg.router.
+	when([''], 'AnyController')
+
+tg.controller('AnyController', ($) => {
+	tg.for('', ($) => {
+		console.log($)
+	})
+})
+
+tg.router.
     when(['/add :url'], 'AddController')
 
 
