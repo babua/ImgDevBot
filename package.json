@@ -1,0 +1,16 @@
+{
+  "name": "ImgDevBot",
+  "version": "0.0.1",
+  "description": "Image response bot",
+  "dependencies": {
+    "telegram-node-bot": "latest",
+    "url-exists" : "latest",
+    "is-image-url" : "latest",
+    "remote-file-size" : "latest",
+    "mkdirp" : "latest",
+    "download-file" : "latest",
+    "node-uuid" : "latest",
+    "thumbnail" : "latest",
+    "gm" : "latest"
+  }
+}
