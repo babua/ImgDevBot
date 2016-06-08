@@ -100,7 +100,7 @@ tg.controller('DeleteController', ($) => {
 			    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
 			    	});
 			    	files = files.filter(function(val){
-			    		if(path.basename(val) === $.query.id) return true
+			    		if(path.basename(val).indexOf($.query.id) !== -1) return true
 			    	});
 			    	if(files.length === 1)
 			    	{
