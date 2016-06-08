@@ -57,16 +57,16 @@ tg.controller('AddController', ($) => {
 											//Make sure thumbnail folder exists
 											mkdirp(config.imageFolder + $.user.id + "/thumbnails/", function (err) {
 											    if (err){console.error(err);} else {
+											    	console.log($);
 											    	//Set up the thumbnail generator
 													var thumbnail = new Thumbnail(config.imageFolder + $.user.id, config.imageFolder + $.user.id + "/thumbnails");    	
 													thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
 													  // "filename" is the name of the thumb in '/path/to/thumbnails'
 													  //Send a message to user after thumbnail is generated
-													  $.sendMessage("Image added with ID: " + path.basename($.newFileName));
+													  $.sendMessage("Image added with ID: " + path.basename($.newFileName),{reply_to_message_id: });
 													});
 											    }
 											});
-											
 										}); 
 								    }
 								});
@@ -87,7 +87,12 @@ tg.controller('AddController', ($) => {
     })
 }) 
 
+tg.router.
+	when(['/delete :id'], 'DeleteController')
 
+tg.controller('DeleteController', ($) => {
+
+})
 
 tg.inlineMode(($) => {
 	console.log($);
