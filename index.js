@@ -106,7 +106,7 @@ tg.inlineMode(($) => {
 		    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
 		    	});
 		    	files.forEach(function(val,ind,arr){
-		    		var dimensions = sizeOf(config.imageFolder + $.from.id + "/" + val);
+		    		var dimensions = imageSize(config.imageFolder + $.from.id + "/" + val);
 
 		    		results.push({
 		    			type: "photo",
