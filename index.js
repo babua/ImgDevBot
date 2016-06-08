@@ -106,7 +106,7 @@ tg.controller('DeleteController', ($) => {
 			    	{
 			    		fs.unlink(config.imageFolder + $.user.id + "/" + files[0], function(err){
 			    			if(!err){
-								fs.unlink(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0]) + "-100x100" + path.extname(files[0]), function(err){
+								fs.unlink(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]), function(err){
 									if(!err){
 										//TODO
 										//Main file is deleted, but log the thumbnail deletion failure in a file
