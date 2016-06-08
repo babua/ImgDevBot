@@ -14,19 +14,58 @@ var config = require('./config/config.js'),
 
 mkdirp.sync(config.imageFolder);
 
-tg.router.
-	when([''], 'AnyController')
 
-tg.controller('AnyController', ($) => {
-	tg.for('', ($) => {
-		console.log('=====AnyController=====')
-		console.log($)
+tg.router.
+    when(['/add :url'], 'AddController').
+    when(['/delete :id'], 'DeleteController').
+    otherwise('OtherwiseController')
+	
+
+tg.controller('DeleteController', ($) => {
+	tg.for('/delete :id', ($) => {
+		console.log($);
+		fs.stat(config.imageFolder + $.user.id, function(err, stats) {
+	    	if(!err){
+	    		fs.readdir(config.imageFolder + $.user.id, function(err,files){
+			    	files = files.filter(function(val){
+			    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
+			    	});
+			    	files = files.filter(function(val){
+			    		if(path.basename(val).indexOf($.query.id) !== -1) return true
+			    	});
+			    	if(files.length === 1)
+			    	{
+			    		fs.unlink(config.imageFolder + $.user.id + "/" + files[0], function(err){
+			    			if(!err){
+			    				console.log(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
+								fs.unlink(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]), function(err){
+									if(!err){
+										$.sendMessage("Image deleted",{reply_to_message_id: $.message.message_id});			
+									} else {
+										console.log("Thumbnail could not be deleted: " + config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
+										//TODO
+										//Main file is deleted, but log the thumbnail deletion failure in a file
+									} 
+								});
+			    			} else {
+			    				console.log(err)
+			    				$.sendMessage("Image could not be deleted",{reply_to_message_id: $.message.message_id});
+			    			}
+			    		});
+			    	} else if (files.length === 0){
+			    		$.sendMessage("ID not found",{reply_to_message_id: $.message.message_id});
+			    	} else if (files.length > 1) {
+			    		console.log("this really shouldn't happen");
+			    		$.sendMessage("Somehow there's more than one image with this UNIQUE ID :( ",{reply_to_message_id: $.message.message_id});
+			    	} else {
+			    		console.log("something went wrong");
+			    	}
+			    });
+			}
+		});	
+
 	})
 })
-
-tg.router.
-    when(['/add :url'], 'AddController')
-
 
 tg.controller('AddController', ($) => {
     tg.for('/add :url', ($) => {
@@ -97,54 +136,11 @@ tg.controller('AddController', ($) => {
     })
 }) 
 
-tg.router.
-	when(['/delete :id'], 'DeleteController')
-
-tg.controller('DeleteController', ($) => {
-	tg.for('/delete :id', ($) => {
-		console.log($);
-		fs.stat(config.imageFolder + $.user.id, function(err, stats) {
-	    	if(!err){
-	    		fs.readdir(config.imageFolder + $.user.id, function(err,files){
-			    	files = files.filter(function(val){
-			    		if(path.extname(val) === ".jpg" || path.extname(val) === ".jpeg" || path.extname(val) === ".png") return true
-			    	});
-			    	files = files.filter(function(val){
-			    		if(path.basename(val).indexOf($.query.id) !== -1) return true
-			    	});
-			    	if(files.length === 1)
-			    	{
-			    		fs.unlink(config.imageFolder + $.user.id + "/" + files[0], function(err){
-			    			if(!err){
-			    				console.log(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
-								fs.unlink(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]), function(err){
-									if(!err){
-										$.sendMessage("Image deleted",{reply_to_message_id: $.message.message_id});			
-									} else {
-										console.log("Thumbnail could not be deleted: " + config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
-										//TODO
-										//Main file is deleted, but log the thumbnail deletion failure in a file
-									} 
-								});
-			    			} else {
-			    				console.log(err)
-			    				$.sendMessage("Image could not be deleted",{reply_to_message_id: $.message.message_id});
-			    			}
-			    		});
-			    	} else if (files.length === 0){
-			    		$.sendMessage("ID not found",{reply_to_message_id: $.message.message_id});
-			    	} else if (files.length > 1) {
-			    		console.log("this really shouldn't happen");
-			    		$.sendMessage("Somehow there's more than one image with this UNIQUE ID :( ",{reply_to_message_id: $.message.message_id});
-			    	} else {
-			    		console.log("something went wrong");
-			    	}
-			    });
-			}
-		});	
-
-	})
+tg.controller('OtherwiseController', ($) => {
+	console.log("=====OtherwiseController=====")
+	console.log($);
 })
+
 
 tg.inlineMode(($) => {
 	console.log($);
