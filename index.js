@@ -14,6 +14,39 @@ var config = require('./config/config.js'),
 
 mkdirp.sync(config.imageFolder);
 
+var saveImage = function($,imageUrl){
+	mkdirp(config.imageFolder + $.user.id, function (err) {
+	//Make sure user's image folder exists
+	if (err)
+	{
+		console.error(err);
+	} else {
+		$.newFileName = uuid.v1() + path.extname(imageUrl);
+		//Download the file to user's folder, rename to unique id
+		download(imageUrl, {
+			directory: config.imageFolder + $.user.id,
+			filename: $.newFileName
+		}, function(err){
+			if (err) throw err
+			//Download complete
+			//Now we make a thumbnail
+			//Make sure thumbnail folder exists
+			mkdirp(config.imageFolder + $.user.id + "/thumbnails/", function (err) {
+			    if (err){console.error(err);} else {
+			    	console.log($);
+			    	//Set up the thumbnail generator
+					var thumbnail = new Thumbnail(config.imageFolder + $.user.id, config.imageFolder + $.user.id + "/thumbnails");    	
+					thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
+					  // "filename" is the name of the thumb in '/path/to/thumbnails'
+					  //Send a message to user after thumbnail is generated
+					  $.sendMessage("Image added with ID: " + path.basename($.newFileName,path.extname($.newFileName)),{reply_to_message_id: $.message.message_id});
+					});
+			    }
+			});
+		}); 
+	}
+	});
+}
 
 tg.router.
     when(['/add :url'], 'AddController').
@@ -87,38 +120,9 @@ tg.controller('AddController', ($) => {
 							if(fileSize < config.fileSizeLimit){
 								//We can start saving the image
 								console.log($);	
-								mkdirp(config.imageFolder + $.user.id, function (err) {
-									//Make sure user's image folder exists
-								    if (err)
-								    {
-								    	console.error(err);
-								    } else {
-								    	console.log('pow!');
-								    	$.newFileName = uuid.v1() + path.extname($.query.url);
-								    	//Download the file to user's folder, rename to unique id
-										download($.query.url, {
-											directory: config.imageFolder + $.user.id,
-											filename: $.newFileName
-										}, function(err){
-											if (err) throw err
-											//Download complete
-											//Now we make a thumbnail
-											//Make sure thumbnail folder exists
-											mkdirp(config.imageFolder + $.user.id + "/thumbnails/", function (err) {
-											    if (err){console.error(err);} else {
-											    	console.log($);
-											    	//Set up the thumbnail generator
-													var thumbnail = new Thumbnail(config.imageFolder + $.user.id, config.imageFolder + $.user.id + "/thumbnails");    	
-													thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
-													  // "filename" is the name of the thumb in '/path/to/thumbnails'
-													  //Send a message to user after thumbnail is generated
-													  $.sendMessage("Image added with ID: " + path.basename($.newFileName,path.extname($.newFileName)),{reply_to_message_id: $.message.message_id});
-													});
-											    }
-											});
-										}); 
-								    }
-								});
+
+								saveImage($,$.query.url);
+
 							} else {
 								$.sendMessage("URL is image but it's larger than " + config.fileSizeLimitHumanReadable );		
 							}
@@ -141,9 +145,24 @@ tg.controller('OtherwiseController', ($) => {
 	console.log($);
 	if($.message.photo !== undefined){
 		var photo = $.message.photo.reduce(function(previousValue, currentValue, currentIndex, array) {
-		  	if(currentValue.width > previousValue.width) return currentValue;
+		  	if(currentValue.width > previousValue.width && currentValue.file_size <= config.fileSizeLimit){
+		  		return currentValue
+		  	} else {
+		  		return previousValue
+		  	}
 		});
-		tg.getFile(photo.file_id, (body, err) => {console.log(body)}) 
+		tg.getFile(photo.file_id, (body, err) => {
+			console.log(body)
+			if(!err){
+				if(body.ok){
+					if(body.result.file_size <= config.fileSizeLimit){
+						var downloadUrl = "https://api.telegram.org/file/bot" + config.telegram.token + "/" + body.result.file_path;
+						console.log(downloadUrl)
+					}
+					
+				}
+			}
+		}); 
 	}
 })
 
