@@ -106,6 +106,7 @@ tg.controller('DeleteController', ($) => {
 			    	{
 			    		fs.unlink(config.imageFolder + $.user.id + "/" + files[0], function(err){
 			    			if(!err){
+			    				console.log(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]));
 								fs.unlink(config.imageFolder + $.user.id + "/thumbnails/" + path.basename(files[0],path.extname(files[0])) + "-100x100" + path.extname(files[0]), function(err){
 									if(!err){
 										//TODO
