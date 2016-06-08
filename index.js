@@ -109,11 +109,11 @@ tg.inlineMode(($) => {
 		    		results.push({
 		    			type: "photo",
 		    			photo_url : config.serverUrl + $.from.id + "/" + val,
-		    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val.splice(0,val.lastIndexOf(".")-1) + "-100x100" + path.extname(val)
+		    			thumb_url : config.serverUrl + $.from.id + "/thumbnails/" + val.slice(0,val.lastIndexOf(".")-1) + "-100x100" + path.extname(val)
 		    		});
 		    	});
 		    	$.paginatedAnswer(results, 10);
-		    	
+
 		    });
     	}
     });
