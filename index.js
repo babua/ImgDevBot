@@ -142,10 +142,11 @@ tg.controller('OtherwiseController', ($) => {
 	if($.message.photo !== undefined){
 		console.log($.message.photo)
 		var photoIndex = $.message.photo.reduce(function(previousValue, currentValue, currentIndex, array) {
-		  if(currentValue.height > previousValue.height) return currentIndex;
+			console.log(currentValue)
+		  // if(currentValue.height > previousValue.height) return currentIndex;
 		});
-		var photo = $.message.photo[photoIndex];
-		tg.getFile(photo.file_id, (body, err) => {console.log(body)}) 
+		// var photo = $.message.photo[photoIndex];
+		// tg.getFile(photo.file_id, (body, err) => {console.log(body)}) 
 	}
 })
 
