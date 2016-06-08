@@ -20,59 +20,52 @@ tg.router.
 
 tg.controller('AddController', ($) => {
     tg.for('/add :url', ($) => {
-    	console.log(path.extname($.query.url));
+    	//Preliminary input checking
     	if(path.extname($.query.url) === ".gif"){
     		$.sendMessage("We don't work with GIFs");
     	} else {
+    		//Check if URL exists
 			urlExists($.query.url, function(err, exists) {
-	    	console.log(exists);
 			if(exists)
 			{
+				//Check if URL is actually an image
 				if(isImageUrl($.query.url)){
+					//Check if it's too big
 					remoteFileSize($.query.url, function(err, fileSize) {
 						if(err) {
 							$.sendMessage("URL is image but its size could not be determined");	
 						} else {
 							if(fileSize < config.fileSizeLimit){
-								$.sendMessage("URL is image and its size is " + fileSize );	
-								//TODO: save file
+								//We can start saving the image
 								console.log($);	
 								mkdirp(config.imageFolder + $.user.id, function (err) {
+									//Make sure user's image folder exists
 								    if (err)
 								    {
 								    	console.error(err);
 								    } else {
 								    	console.log('pow!');
 								    	$.newFileName = uuid.v1() + path.extname($.query.url);
-								    	console.log($.newFileName);
-								    	//$.newFileName = uuid.v1() + "_" + path.basename($.query.url);
+								    	//Download the file to user's folder, rename to unique id
 										download($.query.url, {
 											directory: config.imageFolder + $.user.id,
 											filename: $.newFileName
 										}, function(err){
-
-											console.log("download callback newFileName: " + $.newFileName);
 											if (err) throw err
-											console.log("meow")
-											
-											var mkdirpCallback = function (err) {
-												console.log("injected filename: " + $.newFileName);
-											    if (err)
-											    {
-											    	console.error(err);
-											    } else {
-											    	console.log("thumbnail folder created");
-											    	console.log("thumbnail callback newFileName: " + $.newFileName);
+											//Download complete
+											//Now we make a thumbnail
+											//Make sure thumbnail folder exists
+											mkdirp(config.imageFolder + $.user.id + "/thumbnails/", function (err) {
+											    if (err){console.error(err);} else {
+											    	//Set up the thumbnail generator
 													var thumbnail = new Thumbnail(config.imageFolder + $.user.id, config.imageFolder + $.user.id + "/thumbnails");    	
 													thumbnail.ensureThumbnail($.newFileName, 100, 100, function (err, filename) {
 													  // "filename" is the name of the thumb in '/path/to/thumbnails'
-													  console.log("thumbnail created at " + filename);
+													  //Send a message to user after thumbnail is generated
 													  $.sendMessage("Image added with ID: " + path.basename($.newFileName));
 													});
 											    }
-											}
-
-											mkdirp(config.imageFolder + $.user.id + "/thumbnails/", mkdirpCallback);
+											});
 											
 										}); 
 								    }
@@ -80,9 +73,7 @@ tg.controller('AddController', ($) => {
 							} else {
 								$.sendMessage("URL is image but it's larger than " + config.fileSizeLimitHumanReadable );		
 							}
-							
 						}
-						
 					})
 					
 				} else {
